@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Authors>Christian Kothe</Authors>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>LSL</RootNamespace>
+    <Product>Labstreaminglayer C# bindings</Product>
+    <Version>1.1.2</Version>
+    <DefaultItemExcludes>$(DefaultItemExcludes);examples/**</DefaultItemExcludes>
+  </PropertyGroup>
+</Project>
+
