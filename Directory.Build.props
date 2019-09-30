@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Christian Kothe</Authors>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.1.2</Version>
+  </PropertyGroup>
+</Project>
+

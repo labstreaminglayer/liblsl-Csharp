@@ -1,0 +1,3 @@
+<Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
+  <ProjectReference Include="..\..\liblsl.csproj" />
+</ItemGroup><PropertyGroup><Product>SendDataInChunks</Product></PropertyGroup></Project>
