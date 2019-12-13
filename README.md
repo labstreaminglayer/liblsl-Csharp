@@ -1,12 +1,19 @@
 # C# bindings
 
 The is the C# interface to the lab streaming layer. To use it, you need to include the file LSL.cs in 
-your project, and make sure that the library liblsl32.dll is found (e.g., in your application's root 
-directory or in a system path).
+your project, and make sure that the lsl library (e.g. liblsl32.dll) is found (e.g., in your application's 
+root directory or in a system path).
 
-If you are deploying on a platform that requires a different binary than liblsl32.dll (e.g., liblsl64.so 
-on 64-bit Linux, or liblsl64.dylib on Mac OS, then you need to replace the libname constant in LSL.cs
-by the corresponding file name).
+If you are deploying for something other than Unity, and on a platform that requires a different binary
+than liblsl32.dll (e.g., liblsl64.so on 64-bit Linux, or liblsl64.dylib on Mac OS)
+then you need to replace the libname constant in LSL.cs by the corresponding file name.
+
+These example applications can be debugged from within the IDE (i.e. Visual Studio). However, the built
+products are DLL files, not EXE files. The DLL files can be run at console with `dotnet my_application`
+(from within same folder as my_application.DLL). This will work anywhere the .NET Core Runtime works.
+To make a more portable but platform-dependent product, use `dotnet publish -C Debug -r win10-x64`
+(or Release instead of Debug) and this will generate an EXE file.
+
 
 ## C# Example Programs
 

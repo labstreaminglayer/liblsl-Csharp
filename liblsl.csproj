@@ -4,8 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>LSL</RootNamespace>
     <Product>Labstreaminglayer C# bindings</Product>
-    <Version>1.1.2</Version>
+    <Version>1.12</Version>
     <DefaultItemExcludes>$(DefaultItemExcludes);examples/**</DefaultItemExcludes>
+    <AssemblyName>lsl_csharp</AssemblyName>
   </PropertyGroup>
 </Project>
 

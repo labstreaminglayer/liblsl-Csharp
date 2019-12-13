@@ -1,3 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk"><ItemGroup>
-  <ProjectReference Include="..\..\liblsl.csproj" />
-</ItemGroup><PropertyGroup><Product>ReceiveStringMarkers</Product></PropertyGroup></Project>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\liblsl.csproj" />
+  </ItemGroup>
+  <PropertyGroup>
+    <Product>ReceiveStringMarkers</Product>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+</Project>

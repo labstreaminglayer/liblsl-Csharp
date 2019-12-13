@@ -10,7 +10,7 @@ namespace ConsoleApplication1
         {
             Random rnd = new Random();
 			// create stream info and outlet
-            liblsl.StreamInfo info = new liblsl.StreamInfo("BioSemi", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "sddsfsdf");
+            liblsl.StreamInfo info = new liblsl.StreamInfo("TestCSharp", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "sddsfsdf");
             liblsl.StreamOutlet outlet = new liblsl.StreamOutlet(info);
 
 			// send data in chunks of 10 samples and 8 channels
