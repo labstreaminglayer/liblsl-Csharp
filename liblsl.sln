@@ -1,25 +1,25 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "liblsl", "liblsl.csproj", "{9CF380F5-EB84-4A39-969E-7E6F5534F17F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "liblsl", "liblsl.csproj", "{9CF380F5-EB84-4A39-969E-7E6F5534F17F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{2831BC99-EB85-43AC-AEDF-8A689B8268FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandleMetaData", "examples\HandleMetaData\HandleMetaData.csproj", "{55625B73-07CD-4C9F-ABFB-FB3C5899A79F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandleMetaData", "examples\HandleMetaData\HandleMetaData.csproj", "{55625B73-07CD-4C9F-ABFB-FB3C5899A79F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiveData", "examples\ReceiveData\ReceiveData.csproj", "{98F76BEE-C774-44C0-BAF3-BFF4B429420B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceiveData", "examples\ReceiveData\ReceiveData.csproj", "{98F76BEE-C774-44C0-BAF3-BFF4B429420B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiveDataInChunks", "examples\ReceiveDataInChunks\ReceiveDataInChunks.csproj", "{A0EF1C60-7461-415B-9C98-F28A3283258A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceiveDataInChunks", "examples\ReceiveDataInChunks\ReceiveDataInChunks.csproj", "{A0EF1C60-7461-415B-9C98-F28A3283258A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiveStringMarkers", "examples\ReceiveStringMarkers\ReceiveStringMarkers.csproj", "{8AB092B9-F671-4185-BB6C-543B6A2AE55A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReceiveStringMarkers", "examples\ReceiveStringMarkers\ReceiveStringMarkers.csproj", "{8AB092B9-F671-4185-BB6C-543B6A2AE55A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendData", "examples\SendData\SendData.csproj", "{4DB5312C-5B29-4725-8EA0-3458AC36FB08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendData", "examples\SendData\SendData.csproj", "{4DB5312C-5B29-4725-8EA0-3458AC36FB08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendDataInChunks", "examples\SendDataInChunks\SendDataInChunks.csproj", "{4763E2F5-B238-4896-AC52-217555ACFF2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendDataInChunks", "examples\SendDataInChunks\SendDataInChunks.csproj", "{4763E2F5-B238-4896-AC52-217555ACFF2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendStringMarkers", "examples\SendStringMarkers\SendStringMarkers.csproj", "{0847C79E-E4BD-4B67-8DB7-6873415815A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendStringMarkers", "examples\SendStringMarkers\SendStringMarkers.csproj", "{0847C79E-E4BD-4B67-8DB7-6873415815A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,9 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9CF380F5-EB84-4A39-969E-7E6F5534F17F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -131,6 +128,9 @@ Global
 		{0847C79E-E4BD-4B67-8DB7-6873415815A6}.Release|x86.ActiveCfg = Release|Any CPU
 		{0847C79E-E4BD-4B67-8DB7-6873415815A6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{55625B73-07CD-4C9F-ABFB-FB3C5899A79F} = {2831BC99-EB85-43AC-AEDF-8A689B8268FC}
 		{98F76BEE-C774-44C0-BAF3-BFF4B429420B} = {2831BC99-EB85-43AC-AEDF-8A689B8268FC}
@@ -139,5 +139,8 @@ Global
 		{4DB5312C-5B29-4725-8EA0-3458AC36FB08} = {2831BC99-EB85-43AC-AEDF-8A689B8268FC}
 		{4763E2F5-B238-4896-AC52-217555ACFF2A} = {2831BC99-EB85-43AC-AEDF-8A689B8268FC}
 		{0847C79E-E4BD-4B67-8DB7-6873415815A6} = {2831BC99-EB85-43AC-AEDF-8A689B8268FC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C10DB2A-2433-4783-82DF-C6433CBD211B}
 	EndGlobalSection
 EndGlobal
