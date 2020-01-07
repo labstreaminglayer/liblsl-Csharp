@@ -64,6 +64,31 @@ public class liblsl
     };
 
     /**
+    * Post-processing options for stream inlets.
+    */
+    public enum processing_options_t : byte
+    {
+        proc_none = 0,              // No automatic post-processing; return the ground-truth time stamps for manual
+                                    // post-processing. This is the default behavior of the inlet.
+            
+        proc_clocksync = 1,         // Perform automatic clock synchronization; equivalent to manually adding
+                                    // the time_correction() value to the received time stamps.
+
+        proc_dejitter = 2,          // Remove jitter from time stamps.
+                                    // This will apply a smoothing algorithm to the received time stamps;
+                                    // the smoothing needs to see a minimum number of samples (30-120 seconds worst-case)
+                                    // until the remaining jitter is consistently below 1ms.
+
+        proc_monotonize = 4,        // Force the time-stamps to be monotonically ascending.
+                                    // Only makes sense if timestamps are dejittered.
+
+        proc_threadsafe = 8,        // Post-processing is thread-safe (same inlet can be read from by multiple threads);
+                                    // uses somewhat more CPU.
+
+        proc_ALL = 1 | 2 | 4 | 8    // The combination of all possible post-processing options.
+    };
+
+    /**
     * Protocol version.
     * The major version is protocol_version() / 100;
     * The minor version is protocol_version() % 100;
@@ -475,7 +500,10 @@ public class liblsl
         *                In all other cases (recover is false or the stream is not recoverable) functions may throw a 
         *                LostException if the stream's source is lost (e.g., due to an app or computer crash).
         */
-        public StreamInlet(StreamInfo info, int max_buflen = 360, int max_chunklen = 0, bool recover = true) { obj = dll.lsl_create_inlet(info.handle(), max_buflen, max_chunklen, recover?1:0); }
+        public StreamInlet(StreamInfo info, int max_buflen = 360, int max_chunklen = 0, bool recover = true, processing_options_t postproc_flags = processing_options_t.proc_none) {
+                obj = dll.lsl_create_inlet(info.handle(), max_buflen, max_chunklen, recover?1:0);
+                dll.lsl_set_postprocessing(obj, postproc_flags);
+            }
 
         /** 
         * Destructor.
@@ -1025,6 +1053,9 @@ public class liblsl
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern double lsl_time_correction(IntPtr obj, double timeout, ref int ec);
+
+        [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern int lsl_set_postprocessing(IntPtr obj, processing_options_t flags);
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern double lsl_pull_sample_f(IntPtr obj, float[] buffer, int buffer_elements, double timeout, ref int ec);
