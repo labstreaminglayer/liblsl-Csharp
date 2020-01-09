@@ -882,12 +882,12 @@ public class liblsl
 #elif UNITY_STANDALONE_OSX
             const string libname = "liblsl";
 #elif (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
-            libname = "liblsl64";
+            const string libname = "liblsl64";
 #elif UNITY_EDITOR_WIN
-            libname = "liblsl32";
+            const string libname = "liblsl32";
 #elif UNITY_STANDALONE_WIN
             // a build hook will took care that the correct dll will be renamed after a successfull build 
-            libname =  "liblsl";
+            const string libname =  "liblsl";
 #elif UNITY_ANDROID
             const string libname = "lslAndroid";
 #else
