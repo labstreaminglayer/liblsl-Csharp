@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Christian Kothe</Authors>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Product>$(MSBuildProjectName)</Product>
+    <Version>1.12.2</Version>
+    <OutputType>Exe</OutputType>
+    <OutputPath>$(SolutionDir)bin\$(Configuration)\$(Platform)</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\liblsl.csproj" />
+  </ItemGroup>
+</Project>
+
