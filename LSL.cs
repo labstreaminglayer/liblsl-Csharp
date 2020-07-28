@@ -871,29 +871,19 @@ public class liblsl
     class dll
     {
 
-#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64) || UNITY_STANDALONE_LINUX
+#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64)
             const string libname = "liblsl64.so";
 #elif UNITY_EDITOR_LINUX
             const string libname = "liblsl32.so";
-#elif UNITY_STANDALONE_LINUX
-            const string libname = "liblsl.so";
-#elif Unity_EDITOR_OSX || UNITY_STANDALONE_OSX
-            //32-bit dylib no longer provided.
-            const string libname = "liblsl64";
-#elif UNITY_STANDALONE_OSX
-            const string libname = "liblsl";
 #elif (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
             const string libname = "liblsl64";
 #elif UNITY_EDITOR_WIN
             const string libname = "liblsl32";
-#elif UNITY_STANDALONE_WIN
-            // a build hook will took care that the correct dll will be renamed after a successfull build 
-            const string libname =  "liblsl";
 #elif UNITY_ANDROID
             const string libname = "lslAndroid";
 #else
-            // Name of the binary to include -- replace this if on non-Windows and non-Unity (e.g., liblsl64.so)
-            const string libname = "liblsl32.dll";
+            // Name of the binary to include -- replace this if the native library has a differentname
+            const string libname = "lsl";
 #endif
             
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
