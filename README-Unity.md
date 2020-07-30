@@ -13,13 +13,14 @@ LSL.cs includes a Unity interface to liblsl as a [Unity native plug-in](https://
     * Set the platforms for the plug-in. [See here](https://docs.unity3d.com/Manual/PluginsForDesktop.html).
 1. In Unity, use the menu to place a cube in the scene: GameObject > 3D Object > Cube
 
-### Control a game object from an inlett
+### Control a game object from an inlet
 
 1. When the cube is selected, in the Inspector click on "Add Component", and create a new script called LSLInput.
 1. In the Project viewer, double click on LSLInput.cs. This should launch Visual Studio or another IDE.
 1. Fill in the script. Use [LSL4Unity AInlet](https://github.com/labstreaminglayer/LSL4Unity/blob/master/Scripts/AInlet.cs) for inspiration.
-    * There is [currently a bug]() that prevents liblsl in Unity from resolving streams from _other_ computers while running in editor, and also the built product but only when using ContinuousResolver. For this reason we recommend using liblsl.resolve_stream instead.
-    ```cs
+    * There is [currently a bug](https://github.com/sccn/liblsl/issues/29) that prevents liblsl in Unity from resolving streams from _other_ computers while running in editor, and also the built product but only when using `ContinuousResolver`. For this reason we recommend using `liblsl.resolve_stream` instead.
+
+```cs
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,7 +69,7 @@ public class LSLInput : MonoBehaviour
     }
 }
 
-    ```
+ ```
 1. Elsewhere, run one of the LSL outlet examples. For example, from a conda environment with pylsl installed: `python -m pylsl.examples.SendData`
 1. Run the Unity game and watch that cube shake!
 
