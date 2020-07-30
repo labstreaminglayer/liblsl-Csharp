@@ -12,4 +12,4 @@ These example applications can be debugged from within the IDE (i.e. Visual Stud
 
 # Unity
 
-Please see the separate [README-Unity](https://github.com/labstreaminglayer/liblsl-Csharp/README-Unity.md).
+Please see the separate [README-Unity](https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/README-Unity.md).
