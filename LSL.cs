@@ -98,6 +98,9 @@ public class liblsl
     */
     public static int protocol_version() { return dll.lsl_protocol_version(); }
 
+    /// String describing the library, e.g. build configuration, git commit hash / branch, debug information…
+    public static string library_info() { return Marshal.PtrToStringAnsi(dll.lsl_library_info()); }
+
     /**
     * Version of the liblsl library.
     * The major version is library_version() / 100;
@@ -888,6 +891,9 @@ public class liblsl
             
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_protocol_version();
+
+        [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern IntPtr lsl_library_info();
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_library_version();
