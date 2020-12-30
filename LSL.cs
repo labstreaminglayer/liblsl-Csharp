@@ -870,21 +870,8 @@ public class liblsl
 
     class dll
     {
-
-#if (UNITY_EDITOR_LINUX && UNITY_EDITOR_64)
-            const string libname = "liblsl64.so";
-#elif UNITY_EDITOR_LINUX
-            const string libname = "liblsl32.so";
-#elif (UNITY_EDITOR_WIN && UNITY_EDITOR_64)
-            const string libname = "liblsl64";
-#elif UNITY_EDITOR_WIN
-            const string libname = "liblsl32";
-#elif UNITY_ANDROID
-            const string libname = "lslAndroid";
-#else
-            // Name of the binary to include -- replace this if the native library has a differentname
-            const string libname = "lsl";
-#endif
+        // Name of the binary to include -- replace this if the native library has a differentname
+        const string libname = "lsl";
             
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_protocol_version();
