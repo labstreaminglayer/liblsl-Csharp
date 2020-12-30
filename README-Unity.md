@@ -6,8 +6,10 @@ The [LSL4Unity repository](https://github.com/labstreaminglayer/LSL4Unity) provi
 
 LSL.cs includes a Unity interface to liblsl as a [Unity native plug-in](https://docs.unity3d.com/Manual/NativePlugins.html). The following instructions outline how to add a cube to a Unity scene that uses the LSL native plugin to pull in samples that modify its movement vector. These instructions were written while using Unity 2020.1.0f1.
 
-1. Download the latest [liblsl release](https://github.com/sccn/liblsl/releases) for your platform(s) (e.g. liblsl-1.14.0-Win64.zip) and extract the library (e.g. lsl.dll) into the project's Assets/Plugins/lib folder (you may have to create this folder). If you plan to build for more than one target platform then you may wish to further subdivide the folders.
+1. Download the latest [liblsl release](https://github.com/sccn/liblsl/releases) for your platform(s) (e.g. liblsl-1.14.0-Win64.zip) and extract the library (e.g. lsl.dll) into the project's Assets/Plugins/lib folder (you may have to create this folder).
+    * If you plan to build for more than one target platform then you may wish to further subdivide the folders.
     * If you will deploy to Android, the easiest way to get the lib files is to follow the [liblsl-Android/AndroidStudio](https://github.com/labstreaminglayer/liblsl-Android/tree/master/AndroidStudio#getting-started) instructions to build an apk, then open the apk and copy the contents of the lib folder.
+    * On recent versions of MacOS, if the dylib fails to load for security reasons, you will have to allow it manually in "Security & Privacy Settings". [More info](https://support.apple.com/en-ca/HT202491).
 1. Drag and drop LSL.cs into the project's Assets/Plugins folder.
 1. In Unity, use the Project view and navigate to the Assets/Plugins/lib folder. For each library file:
     * Set the platforms for the plug-in. [See here](https://docs.unity3d.com/Manual/PluginsForDesktop.html).
