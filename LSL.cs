@@ -45,7 +45,7 @@ public class liblsl
     /**
     * Data format of a channel (each transmitted sample holds an array of channels).
     */
-    public enum channel_format_t : byte
+    public enum channel_format_t : int
     {
         cf_float32 = 1,     // For up to 24-bit precision measurements in the appropriate physical unit 
         // (e.g., microvolts). Integers from -16777216 to 16777216 are represented accurately.
@@ -67,7 +67,7 @@ public class liblsl
     /**
     * Post-processing options for stream inlets.
     */
-    public enum processing_options_t : byte
+    public enum processing_options_t : int
     {
         proc_none = 0,              // No automatic post-processing; return the ground-truth time stamps for manual
                                     // post-processing. This is the default behavior of the inlet.
