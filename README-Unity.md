@@ -8,7 +8,7 @@ LSL.cs includes a Unity interface to liblsl as a [Unity native plug-in](https://
 
 1. Download the latest [liblsl release](https://github.com/sccn/liblsl/releases) for your platform(s) (e.g. liblsl-1.14.0-Win64.zip) and extract the library (e.g. lsl.dll) into the project's Assets/Plugins/lib folder (you may have to create this folder).
     * If you plan to build for more than one target platform then you may wish to further subdivide the folders.
-    * If you will deploy to Android, the easiest way to get the lib files is to follow the [liblsl-Android/AndroidStudio](https://github.com/labstreaminglayer/liblsl-Android/tree/master/AndroidStudio#getting-started) instructions to build an apk, then open the apk and copy the contents of the lib folder.
+    * If you will deploy to Android, the easiest way to get the lib files is to follow the instructions in the ["Building for Android" LSL docs](https://labstreaminglayer.readthedocs.io/dev/build_android.html).
     * On recent versions of MacOS, if the dylib fails to load for security reasons, you will have to allow it manually in "Security & Privacy Settings". [More info](https://support.apple.com/en-ca/HT202491).
 1. Drag and drop LSL.cs into the project's Assets/Plugins folder.
 1. In Unity, use the Project view and navigate to the Assets/Plugins/lib folder. For each library file:
