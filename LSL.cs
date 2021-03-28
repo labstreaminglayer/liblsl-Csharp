@@ -156,11 +156,26 @@ public class liblsl
         public StreamInfo(string name, string type, int channel_count = 1, double nominal_srate = IRREGULAR_RATE, channel_format_t channel_format = channel_format_t.cf_float32, string source_id = "") { obj = dll.lsl_create_streaminfo(name, type, channel_count, nominal_srate, channel_format, source_id); }
         public StreamInfo(IntPtr handle) { obj = handle; }
 
+        /// Destroy a previously created streaminfo object.
+        ~StreamInfo() { Dispose(false); }
+
         /// Dispose of the object
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool _disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
             dll.lsl_destroy_streaminfo(obj);
             obj = IntPtr.Zero;
+            _disposed = true;
         }
       
         // ========================
@@ -320,14 +335,28 @@ public class liblsl
         */
         public StreamOutlet(StreamInfo info, int chunk_size = 0, int max_buffered = 360) { obj = dll.lsl_create_outlet(info.handle(), chunk_size, max_buffered); }
 
+        ~StreamOutlet() { Dispose(false); }
+
         /**
         * Dispose.
-        * The stream will no longer be discoverable after destruction and all paired inlets will stop delivering data.
+        * The stream will no longer be discoverable after disposal (or when disposed by the GC) and all paired inlets will stop delivering data.
         */
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool _disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
             dll.lsl_destroy_outlet(obj);
             obj = IntPtr.Zero;
+            _disposed = true;
         }
 
 
@@ -514,14 +543,28 @@ public class liblsl
                 dll.lsl_set_postprocessing(obj, postproc_flags);
             }
 
+        ~StreamInlet() { Dispose(false); }
+
         /** 
-        * Dispose.
-        * The inlet will automatically disconnect if destroyed.
+        * Dispose
+        * The inlet will be disconnect after disposal (or when disposed by the GC)
         */
         public void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool _disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
             dll.lsl_destroy_inlet(obj);
             obj = IntPtr.Zero;
+            _disposed = true;
         }
 
         /**
@@ -811,13 +854,25 @@ public class liblsl
         public ContinuousResolver(string pred) { obj = dll.lsl_create_continuous_resolver_bypred(pred, 5.0); }
         public ContinuousResolver(string pred, double forget_after) { obj = dll.lsl_create_continuous_resolver_bypred(pred, forget_after); }
 
-        /** 
-        * Dispose.
-        */
+        ~ContinuousResolver() { Dispose(false); }
+
+        /// Dispose of the object
         public void Dispose()
-        { 
-            dll.lsl_destroy_continuous_resolver(obj);
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool _disposed = false;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+             dll.lsl_destroy_continuous_resolver(obj);
             obj = IntPtr.Zero;
+            _disposed = true;
         }
 
         /**
