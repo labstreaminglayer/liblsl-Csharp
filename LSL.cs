@@ -304,8 +304,8 @@ public class liblsl
     * A stream outlet.
     * Outlets are used to make streaming data (and the meta-data) available on the lab network.
     */
-    public class StreamOutlet
-    {
+    public class StreamOutlet : IDisposable
+        {
         /**
         * Establish a new stream outlet. This makes the stream discoverable.
         * @param info The stream information to use for creating this stream. Stays constant over the lifetime of the outlet.
@@ -317,10 +317,13 @@ public class liblsl
         public StreamOutlet(StreamInfo info, int chunk_size = 0, int max_buffered = 360) { obj = dll.lsl_create_outlet(info.handle(), chunk_size, max_buffered); }
 
         /**
-        * Destructor.
+        * Dispose.
         * The stream will no longer be discoverable after destruction and all paired inlets will stop delivering data.
         */
-        ~StreamOutlet() { dll.lsl_destroy_outlet(obj); }
+        public void Dispose()
+        {
+            dll.lsl_destroy_outlet(obj);
+        }
 
 
         // ========================================
