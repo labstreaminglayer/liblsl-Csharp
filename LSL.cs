@@ -134,7 +134,7 @@ public class liblsl
     * written to disk when recording the stream (playing a similar role as a file header).
     */
 
-    public class StreamInfo
+    public class StreamInfo: IDisposable
     {
         /**
         * Construct a new StreamInfo object.
@@ -156,9 +156,13 @@ public class liblsl
         public StreamInfo(string name, string type, int channel_count = 1, double nominal_srate = IRREGULAR_RATE, channel_format_t channel_format = channel_format_t.cf_float32, string source_id = "") { obj = dll.lsl_create_streaminfo(name, type, channel_count, nominal_srate, channel_format, source_id); }
         public StreamInfo(IntPtr handle) { obj = handle; }
 
-        /// Destroy a previously created streaminfo object.
-        ~StreamInfo() { dll.lsl_destroy_streaminfo(obj); }
-
+        /// Dispose of the object
+        public void Dispose()
+        {
+            dll.lsl_destroy_streaminfo(obj);
+            obj = IntPtr.Zero;
+        }
+      
         // ========================
         // === Core Information ===
         // ========================
@@ -323,6 +327,7 @@ public class liblsl
         public void Dispose()
         {
             dll.lsl_destroy_outlet(obj);
+            obj = IntPtr.Zero;
         }
 
 
@@ -482,7 +487,7 @@ public class liblsl
     * A stream inlet.
     * Inlets are used to receive streaming data (and meta-data) from the lab network.
     */
-    public class StreamInlet
+    public class StreamInlet: IDisposable
     {
 /**
         * Construct a new stream inlet from a resolved stream info.
@@ -510,10 +515,14 @@ public class liblsl
             }
 
         /** 
-        * Destructor.
+        * Dispose.
         * The inlet will automatically disconnect if destroyed.
         */
-        ~StreamInlet() { dll.lsl_destroy_inlet(obj); }
+        public void Dispose()
+        {
+            dll.lsl_destroy_inlet(obj);
+            obj = IntPtr.Zero;
+        }
 
         /**
         * Retrieve the complete information of the given stream, including the extended description.
@@ -770,7 +779,7 @@ public class liblsl
     * visible on the network.
     */
 
-    public class ContinuousResolver
+    public class ContinuousResolver: IDisposable
     {
         /**
         * Construct a new continuous_resolver that resolves all streams on the network. 
@@ -803,9 +812,13 @@ public class liblsl
         public ContinuousResolver(string pred, double forget_after) { obj = dll.lsl_create_continuous_resolver_bypred(pred, forget_after); }
 
         /** 
-        * Destructor.
+        * Dispose.
         */
-        ~ContinuousResolver() { dll.lsl_destroy_continuous_resolver(obj); }
+        public void Dispose()
+        { 
+            dll.lsl_destroy_continuous_resolver(obj);
+            obj = IntPtr.Zero;
+        }
 
         /**
         * Obtain the set of currently present streams on the network (i.e. resolve result).
