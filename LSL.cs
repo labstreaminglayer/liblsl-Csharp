@@ -147,7 +147,26 @@ namespace LSL
             public StreamInfo(IntPtr handle) { obj = handle; }
 
             /// Destroy a previously created streaminfo object.
-            ~StreamInfo() { dll.lsl_destroy_streaminfo(obj); }
+            ~StreamInfo() { Dispose(false); }
+
+            /// Dispose of the object
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            private bool _disposed = false;
+            protected virtual void Dispose(bool disposing)
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                dll.lsl_destroy_streaminfo(obj);
+                obj = IntPtr.Zero;
+                _disposed = true;
+            }
 
             // ========================
             // === Core Information ===
@@ -306,11 +325,29 @@ namespace LSL
             */
             public StreamOutlet(StreamInfo info, int chunk_size = 0, int max_buffered = 360) { obj = dll.lsl_create_outlet(info.handle(), chunk_size, max_buffered); }
 
+            ~StreamOutlet() { Dispose(false); }
+
             /**
-            * Destructor.
-            * The stream will no longer be discoverable after destruction and all paired inlets will stop delivering data.
+            * Dispose.
+            * The stream will no longer be discoverable after disposal (or when disposed by the GC) and all paired inlets will stop delivering data.
             */
-            ~StreamOutlet() { dll.lsl_destroy_outlet(obj); }
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            private bool _disposed = false;
+            protected virtual void Dispose(bool disposing)
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                dll.lsl_destroy_outlet(obj);
+                obj = IntPtr.Zero;
+                _disposed = true;
+            }
 
 
             // ========================================
@@ -497,11 +534,29 @@ namespace LSL
                 dll.lsl_set_postprocessing(obj, postproc_flags);
             }
 
+             ~StreamInlet() { Dispose(false); }
+
             /** 
-            * Destructor.
-            * The inlet will automatically disconnect if destroyed.
+            * Dispose
+            * The inlet will be disconnect after disposal (or when disposed by the GC)
             */
-            ~StreamInlet() { dll.lsl_destroy_inlet(obj); }
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            private bool _disposed = false;
+            protected virtual void Dispose(bool disposing)
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                dll.lsl_destroy_inlet(obj);
+                obj = IntPtr.Zero;
+                _disposed = true;
+            }
 
             /**
             * Retrieve the complete information of the given stream, including the extended description.
@@ -799,10 +854,27 @@ namespace LSL
             public ContinuousResolver(string pred) { obj = dll.lsl_create_continuous_resolver_bypred(pred, 5.0); }
             public ContinuousResolver(string pred, double forget_after) { obj = dll.lsl_create_continuous_resolver_bypred(pred, forget_after); }
 
-            /** 
-            * Destructor.
-            */
-            ~ContinuousResolver() { dll.lsl_destroy_continuous_resolver(obj); }
+            ~ContinuousResolver() { Dispose(false); }
+
+            /// Dispose of the object
+            public void Dispose()
+            {
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+            private bool _disposed = false;
+            protected virtual void Dispose(bool disposing)
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                dll.lsl_destroy_continuous_resolver(obj);
+                obj = IntPtr.Zero;
+                _disposed = true;
+            }
+
 
             /**
             * Obtain the set of currently present streams on the network (i.e. resolve result).
