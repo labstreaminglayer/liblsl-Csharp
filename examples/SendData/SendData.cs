@@ -11,8 +11,8 @@ namespace ConsoleApplication1
             Random rnd = new Random();
 
             // create stream info and outlet
-            liblsl.StreamInfo info = new liblsl.StreamInfo("TestCSharp", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "sddsfsdf");
-            liblsl.StreamOutlet outlet = new liblsl.StreamOutlet(info);
+            using liblsl.StreamInfo info = new liblsl.StreamInfo("TestCSharp", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "sddsfsdf");
+            using liblsl.StreamOutlet outlet = new liblsl.StreamOutlet(info);
             float[] data = new float[8];
             while (!Console.KeyAvailable)
             {

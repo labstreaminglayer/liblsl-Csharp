@@ -10,7 +10,8 @@ namespace ConsoleApplication1
             liblsl.StreamInfo[] results = liblsl.resolve_stream("type", "EEG");
 
             // open an inlet and print some interesting info about the stream (meta-data, etc.)
-            liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            using liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            results.DisposeArray();
             System.Console.Write(inlet.info().as_xml());
 
             // read samples

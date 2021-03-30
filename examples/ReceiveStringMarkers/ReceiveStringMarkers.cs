@@ -11,7 +11,8 @@ namespace ConsoleApplication1
             liblsl.StreamInfo[] results = liblsl.resolve_stream("type", "Markers");
 
             // open an inlet and print meta-data
-            liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            using liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            results.DisposeArray();
             Console.Write(inlet.info().as_xml());
 
             // read samples
