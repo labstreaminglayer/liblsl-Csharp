@@ -46,8 +46,17 @@ namespace LSL
             return true;
         }
     }
-    public class liblsl
+    public static class liblsl
     {
+        /// <summary>
+        /// Helper method to dispose a StreamInfo[] array
+        /// </summary>
+        /// <param name="arr">Array to be disposed</param>
+        public static void DisposeArray(this StreamInfo[] array)
+        {
+            foreach (var si in array) si.Dispose();
+        }
+
         /// <summary>Constant to indicate that a stream has variable sampling rate.</summary>
         public const double IRREGULAR_RATE = 0.0;
 

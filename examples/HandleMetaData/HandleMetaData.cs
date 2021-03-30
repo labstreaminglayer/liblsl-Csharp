@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using LSL;
 
 namespace ConsoleApplication1
@@ -8,11 +7,15 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+            {
+                using liblsl.StreamInfo inf_ = new liblsl.StreamInfo("Test", "EEG", 8, 100, liblsl.channel_format_t.cf_double64, "test1234");
+                Console.Out.WriteLine("Test");
+            }
             // create a new StreamInfo and declare some meta-data (in accordance with XDF format)
-            liblsl.StreamInfo info = new liblsl.StreamInfo("MetaTester", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "myuid323457");
+            using liblsl.StreamInfo info = new liblsl.StreamInfo("MetaTester","EEG",8,100,liblsl.channel_format_t.cf_float32,"myuid323457");
             liblsl.XMLElement chns = info.desc().append_child("channels");
-            String[] labels = { "C3", "C4", "Cz", "FPz", "POz", "CPz", "O1", "O2" };
-            for (int k = 0; k < labels.Length; k++)
+            String[] labels = {"C3","C4","Cz","FPz","POz","CPz","O1","O2"};
+            for (int k=0;k<labels.Length;k++)
                 chns.append_child("channel")
                     .append_child_value("label", labels[k])
                     .append_child_value("unit", "microvolts")
@@ -29,10 +32,12 @@ namespace ConsoleApplication1
             // === the following could run on another computer ===
 
             // resolve the stream and open an inlet
-            liblsl.StreamInfo[] results = liblsl.resolve_stream("name", "MetaTester");
-            liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            liblsl.StreamInfo[] results = liblsl.resolve_stream("name","MetaTester");
+            using liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            foreach (liblsl.StreamInfo si in results) si.Dispose();
+
             // get the full stream info (including custom meta-data) and dissect it
-            liblsl.StreamInfo inf = inlet.info();
+            using liblsl.StreamInfo inf = inlet.info();
             Console.WriteLine("The stream's XML meta-data is: ");
             Console.WriteLine(inf.as_xml());
             Console.WriteLine("The manufacturer is: " + inf.desc().child_value("manufacturer"));
