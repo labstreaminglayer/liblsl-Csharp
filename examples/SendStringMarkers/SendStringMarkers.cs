@@ -15,12 +15,13 @@ namespace ConsoleApplication1
             Random rnd = new Random();
             string[] strings = new string[] { "Test", "ABC", "123" };
             string[] sample = new string[1];
-            for (int k = 0; ; k++)
+            for (int k = 0; !Console.KeyAvailable; k++)
             {
                 // send a marker and wait for a random interval
                 sample[0] = strings[k % 3];
                 outl.push_sample(sample);
-                System.Threading.Thread.Sleep(rnd.Next(1000));
+                Console.Out.WriteLine(sample[0]);
+                Thread.Sleep(rnd.Next(1000));
             }
         }
     }

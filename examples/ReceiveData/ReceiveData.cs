@@ -1,5 +1,3 @@
-using System;
-using System.Threading;
 using LSL;
 
 namespace ConsoleApplication1
@@ -17,15 +15,13 @@ namespace ConsoleApplication1
 
             // read samples
             float[] sample = new float[8];
-            while (true)
+            while (!System.Console.KeyAvailable)
             {
                 inlet.pull_sample(sample);
                 foreach (float f in sample)
-                    System.Console.Write("\t{0}",f);
+                    System.Console.Write("\t{0}", f);
                 System.Console.WriteLine();
             }
-
-            System.Console.ReadKey();
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using LSL;
 
 namespace ConsoleApplication1
@@ -13,14 +12,14 @@ namespace ConsoleApplication1
 
             // open an inlet and print meta-data
             liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
-            System.Console.Write(inlet.info().as_xml());
+            Console.Write(inlet.info().as_xml());
 
             // read samples
             string[] sample = new string[1];
-            while (true)
+            while (!Console.KeyAvailable)
             {
                 inlet.pull_sample(sample);
-                System.Console.WriteLine(sample[0]);
+                Console.WriteLine(sample[0]);
             }
         }
     }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using LSL;
 
 namespace ConsoleApplication1
@@ -22,9 +21,9 @@ namespace ConsoleApplication1
             // read samples
             float[,] buffer = new float[512, 8];
             double[] timestamps = new double[512];
-            while (true)
+            while (!Console.KeyAvailable)
             {
-                int num = inlet.pull_chunk(buffer,timestamps);
+                int num = inlet.pull_chunk(buffer, timestamps);
                 for (int s = 0; s < num; s++)
                 {
                     for (int c = 0; c < 8; c++)
