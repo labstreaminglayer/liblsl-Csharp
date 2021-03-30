@@ -18,6 +18,34 @@ namespace LSL
     /// 
     /// </summary>
 
+    public abstract class LSLObject : SafeHandle
+    {
+        public IntPtr obj { get => handle; }
+        public LSLObject(IntPtr obj) : base(IntPtr.Zero, true)
+        {
+#if LSL_PRINT_OBJECT_LIFETIMES
+            System.Console.Out.WriteLine($"Created object {obj:X}");
+#endif
+            if (obj == IntPtr.Zero) throw new liblsl.InternalException("Error creating object");
+            this.SetHandle(obj);
+        }
+
+        public override bool IsInvalid => handle == IntPtr.Zero;
+
+        /// <summary>
+        /// To be implemented in inheriting classes: the liblsl function to destroy the internal object
+        /// </summary>
+        protected abstract void DestroyLSLObject(IntPtr obj);
+
+        protected override bool ReleaseHandle()
+        {
+#if LSL_PRINT_OBJECT_LIFETIMES
+            System.Console.Out.WriteLine($"Destroying object {handle:X}");
+#endif
+            DestroyLSLObject(handle);
+            return true;
+        }
+    }
     public class liblsl
     {
         /// <summary>Constant to indicate that a stream has variable sampling rate.</summary>
@@ -39,7 +67,7 @@ namespace LSL
 
         /// <summary>Data format of a channel (each transmitted sample holds an array of channels).</summary>
         public enum channel_format_t : int
-		{
+        {
             cf_float32 = 1,     // For up to 24-bit precision measurements in the appropriate physical unit 
                                 // (e.g., microvolts). Integers from -16777216 to 16777216 are represented accurately.
             cf_double64 = 2,    // For universal numeric data as long as permitted by network & disk budget. 
@@ -124,7 +152,7 @@ namespace LSL
         * written to disk when recording the stream (playing a similar role as a file header).
         */
 
-        public class StreamInfo
+        public class StreamInfo : LSLObject
         {
             /**
             * Construct a new StreamInfo object.
@@ -143,30 +171,11 @@ namespace LSL
             *                  serving app, device or computer crashes (just by finding a stream with the same source id on the network again).
             *                  Therefore, it is highly recommended to always try to provide whatever information can uniquely identify the data source itself.
             */
-            public StreamInfo(string name, string type, int channel_count = 1, double nominal_srate = IRREGULAR_RATE, channel_format_t channel_format = channel_format_t.cf_float32, string source_id = "") { obj = dll.lsl_create_streaminfo(name, type, channel_count, nominal_srate, channel_format, source_id); }
-            public StreamInfo(IntPtr handle) { obj = handle; }
+            public StreamInfo(string name, string type, int channel_count = 1, double nominal_srate = IRREGULAR_RATE, channel_format_t channel_format = channel_format_t.cf_float32, string source_id = "")
+                : base(dll.lsl_create_streaminfo(name, type, channel_count, nominal_srate, channel_format, source_id)) { }
+            public StreamInfo(IntPtr handle) : base(handle) { }
 
-            /// Destroy a previously created streaminfo object.
-            ~StreamInfo() { Dispose(false); }
-
-            /// Dispose of the object
-            public void Dispose()
-            {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-            private bool _disposed = false;
-            protected virtual void Dispose(bool disposing)
-            {
-                if (_disposed)
-                {
-                    return;
-                }
-
-                dll.lsl_destroy_streaminfo(obj);
-                obj = IntPtr.Zero;
-                _disposed = true;
-            }
+            protected override void DestroyLSLObject(IntPtr obj) { dll.lsl_destroy_streaminfo(obj); }
 
             // ========================
             // === Core Information ===
@@ -294,14 +303,6 @@ namespace LSL
                 dll.lsl_destroy_string(pXml);
                 return strXml;
             }
-
-
-            /**
-             * Get access to the underlying handle.
-             */
-            public IntPtr handle() { return obj; }
-
-            private IntPtr obj;
         }
 
 
@@ -313,7 +314,7 @@ namespace LSL
         * A stream outlet.
         * Outlets are used to make streaming data (and the meta-data) available on the lab network.
         */
-        public class StreamOutlet
+        public class StreamOutlet : LSLObject
         {
             /**
             * Establish a new stream outlet. This makes the stream discoverable.
@@ -323,32 +324,13 @@ namespace LSL
             * @param max_buffered Optionally the maximum amount of data to buffer (in seconds if there is a nominal 
             *                     sampling rate, otherwise x100 in samples). The default is 6 minutes of data. 
             */
-            public StreamOutlet(StreamInfo info, int chunk_size = 0, int max_buffered = 360) { obj = dll.lsl_create_outlet(info.handle(), chunk_size, max_buffered); }
+            public StreamOutlet(StreamInfo info, int chunk_size = 0, int max_buffered = 360)
+                : base(dll.lsl_create_outlet(info.DangerousGetHandle(), chunk_size, max_buffered)) { }
 
-            ~StreamOutlet() { Dispose(false); }
-
-            /**
-            * Dispose.
-            * The stream will no longer be discoverable after disposal (or when disposed by the GC) and all paired inlets will stop delivering data.
-            */
-            public void Dispose()
+            protected override void DestroyLSLObject(IntPtr obj)
             {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-            private bool _disposed = false;
-            protected virtual void Dispose(bool disposing)
-            {
-                if (_disposed)
-                {
-                    return;
-                }
-
                 dll.lsl_destroy_outlet(obj);
-                obj = IntPtr.Zero;
-                _disposed = true;
             }
-
 
             // ========================================
             // === Pushing a sample into the outlet ===
@@ -425,8 +407,6 @@ namespace LSL
             * This is what was used to create the stream (and also has the Additional Network Information fields assigned).
             */
             public StreamInfo info() { return new StreamInfo(dll.lsl_get_info(obj)); }
-
-            private IntPtr obj;
         }
 
 
@@ -506,7 +486,7 @@ namespace LSL
         * A stream inlet.
         * Inlets are used to receive streaming data (and meta-data) from the lab network.
         */
-        public class StreamInlet
+        public class StreamInlet : LSLObject
         {
             /**
                     * Construct a new stream inlet from a resolved stream info.
@@ -529,33 +509,14 @@ namespace LSL
                     *                LostException if the stream's source is lost (e.g., due to an app or computer crash).
                     */
             public StreamInlet(StreamInfo info, int max_buflen = 360, int max_chunklen = 0, bool recover = true, processing_options_t postproc_flags = processing_options_t.proc_none)
+                : base(dll.lsl_create_inlet(info.DangerousGetHandle(), max_buflen, max_chunklen, recover ? 1 : 0))
             {
-                obj = dll.lsl_create_inlet(info.handle(), max_buflen, max_chunklen, recover ? 1 : 0);
                 dll.lsl_set_postprocessing(obj, postproc_flags);
             }
 
-             ~StreamInlet() { Dispose(false); }
-
-            /** 
-            * Dispose
-            * The inlet will be disconnect after disposal (or when disposed by the GC)
-            */
-            public void Dispose()
+            protected override void DestroyLSLObject(IntPtr obj)
             {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-            private bool _disposed = false;
-            protected virtual void Dispose(bool disposing)
-            {
-                if (_disposed)
-                {
-                    return;
-                }
-
                 dll.lsl_destroy_inlet(obj);
-                obj = IntPtr.Zero;
-                _disposed = true;
             }
 
             /**
@@ -691,8 +652,6 @@ namespace LSL
             * hot-swapped or restarted in between two measurements.
             */
             public bool was_clock_reset() { return (int)dll.lsl_was_clock_reset(obj) != 0; }
-
-            private IntPtr obj;
         }
 
 
@@ -822,7 +781,7 @@ namespace LSL
         * visible on the network.
         */
 
-        public class ContinuousResolver
+        public class ContinuousResolver : LSLObject
         {
             /**
             * Construct a new continuous_resolver that resolves all streams on the network. 
@@ -830,8 +789,8 @@ namespace LSL
             * @param forget_after When a stream is no longer visible on the network (e.g., because it was shut down),
             *                     this is the time in seconds after which it is no longer reported by the resolver.
             */
-            public ContinuousResolver() { obj = dll.lsl_create_continuous_resolver(5.0); }
-            public ContinuousResolver(double forget_after) { obj = dll.lsl_create_continuous_resolver(forget_after); }
+            public ContinuousResolver(double forget_after = 5.0)
+                : base(dll.lsl_create_continuous_resolver(forget_after)) { }
 
             /**
             * Construct a new continuous_resolver that resolves all streams with a specific value for a given property.
@@ -841,8 +800,8 @@ namespace LSL
             * @param forget_after When a stream is no longer visible on the network (e.g., because it was shut down),
             *                     this is the time in seconds after which it is no longer reported by the resolver.
             */
-            public ContinuousResolver(string prop, string value) { obj = dll.lsl_create_continuous_resolver_byprop(prop, value, 5.0); }
-            public ContinuousResolver(string prop, string value, double forget_after) { obj = dll.lsl_create_continuous_resolver_byprop(prop, value, forget_after); }
+            public ContinuousResolver(string prop, string value, double forget_after = 5.0)
+                : base(dll.lsl_create_continuous_resolver_byprop(prop, value, forget_after)) { }
 
             /**
             * Construct a new continuous_resolver that resolves all streams that match a given XPath 1.0 predicate.
@@ -851,29 +810,8 @@ namespace LSL
             * @param forget_after When a stream is no longer visible on the network (e.g., because it was shut down),
             *                     this is the time in seconds after which it is no longer reported by the resolver.
             */
-            public ContinuousResolver(string pred) { obj = dll.lsl_create_continuous_resolver_bypred(pred, 5.0); }
-            public ContinuousResolver(string pred, double forget_after) { obj = dll.lsl_create_continuous_resolver_bypred(pred, forget_after); }
-
-            ~ContinuousResolver() { Dispose(false); }
-
-            /// Dispose of the object
-            public void Dispose()
-            {
-                Dispose(true);
-                GC.SuppressFinalize(this);
-            }
-            private bool _disposed = false;
-            protected virtual void Dispose(bool disposing)
-            {
-                if (_disposed)
-                {
-                    return;
-                }
-
-                dll.lsl_destroy_continuous_resolver(obj);
-                obj = IntPtr.Zero;
-                _disposed = true;
-            }
+            public ContinuousResolver(string pred, double forget_after = 5.0)
+                : base(dll.lsl_create_continuous_resolver_bypred(pred, forget_after)) { }
 
 
             /**
@@ -891,7 +829,10 @@ namespace LSL
                 return res;
             }
 
-            private IntPtr obj;
+            protected override void DestroyLSLObject(IntPtr obj)
+            {
+                dll.lsl_destroy_continuous_resolver(obj);
+            }
         }
 
         // =======================
