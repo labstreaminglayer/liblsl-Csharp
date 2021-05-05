@@ -1,16 +1,16 @@
 using LSL;
 
-namespace ConsoleApplication1
+namespace LSLExamples
 {
-    class Program
+    static class ReceiveData
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // wait until an EEG stream shows up
-            liblsl.StreamInfo[] results = liblsl.resolve_stream("type", "EEG");
+            StreamInfo[] results = LSL.LSL.resolve_stream("type", "EEG");
 
             // open an inlet and print some interesting info about the stream (meta-data, etc.)
-            using liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
+            using StreamInlet inlet = new StreamInlet(results[0]);
             results.DisposeArray();
             System.Console.Write(inlet.info().as_xml());
 

@@ -2,15 +2,15 @@ using System;
 using System.Threading;
 using LSL;
 
-namespace ConsoleApplication1
+namespace LSLExamples
 {
-    class Program
+    static class SendStringMarkers
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // create stream info and outlet
-            using liblsl.StreamInfo inf = new liblsl.StreamInfo("Test1", "Markers", 1, 0, liblsl.channel_format_t.cf_string, "giu4569");
-            using liblsl.StreamOutlet outl = new liblsl.StreamOutlet(inf);
+            using StreamInfo inf = new StreamInfo("Test1", "Markers", 1, 0, channel_format_t.cf_string, "giu4569");
+            using StreamOutlet outl = new StreamOutlet(inf);
 
             Random rnd = new Random();
             string[] strings = new string[] { "Test", "ABC", "123" };

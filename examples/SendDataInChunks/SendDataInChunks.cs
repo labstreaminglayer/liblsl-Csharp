@@ -2,16 +2,16 @@
 using System.Threading;
 using LSL;
 
-namespace ConsoleApplication1
+namespace LSLExamples
 {
-    class Program
+    static class SendDataInChunks
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Random rnd = new Random();
             // create stream info and outlet
-            using liblsl.StreamInfo info = new liblsl.StreamInfo("TestCSharp", "EEG", 8, 100, liblsl.channel_format_t.cf_float32, "sddsfsdf");
-            using liblsl.StreamOutlet outlet = new liblsl.StreamOutlet(info);
+            using StreamInfo info = new StreamInfo("TestCSharp", "EEG", 8, 100, channel_format_t.cf_float32, "sddsfsdf");
+            using StreamOutlet outlet = new StreamOutlet(info);
 
             // send data in chunks of 10 samples and 8 channels
             float[,] data = new float[10, 8];
