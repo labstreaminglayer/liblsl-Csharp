@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
+  <PropertyGroup>
+	<TargetFramework>net5.0</TargetFramework>
+	<Version>1.14</Version>
+	<LangVersion>8.0</LangVersion>
+	<OutputType>Exe</OutputType>
+  </PropertyGroup>
+   <ItemGroup>
     <ProjectReference Include="..\..\liblsl.csproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <Product>HandleMetaData</Product>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-  </PropertyGroup>
 </Project>

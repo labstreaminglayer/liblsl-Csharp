@@ -1,26 +1,26 @@
 ﻿using System;
-using System.Threading;
 using LSL;
 
-namespace ConsoleApplication1
+namespace LSLExamples
 {
-    class Program
+    static class ReceiveStringMarkers
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // wait until an EEG stream shows up
-            liblsl.StreamInfo[] results = liblsl.resolve_stream("type", "Markers");
+            StreamInfo[] results = LSL.LSL.resolve_stream("type", "Markers");
 
             // open an inlet and print meta-data
-            liblsl.StreamInlet inlet = new liblsl.StreamInlet(results[0]);
-            System.Console.Write(inlet.info().as_xml());
+            using StreamInlet inlet = new StreamInlet(results[0]);
+            results.DisposeArray();
+            Console.Write(inlet.info().as_xml());
 
             // read samples
             string[] sample = new string[1];
-            while (true)
+            while (!Console.KeyAvailable)
             {
                 inlet.pull_sample(sample);
-                System.Console.WriteLine(sample[0]);
+                Console.WriteLine(sample[0]);
             }
         }
     }

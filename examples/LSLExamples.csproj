@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<!-- All-in-one example project.
+	It contains a launcher for all examples in the subdirectories that
+	compiles to a single .exe, prints some information about the wrapper and
+	passes all arguments through to the example specified as first command line
+	argument. -->
+  <PropertyGroup>
+	<TargetFramework>netcoreapp5.0</TargetFramework>
+	<Product>Labstreaminglayer C# examples</Product>
+	<Version>1.14</Version>
+	<LangVersion>8.0</LangVersion>
+	<OutputType>Exe</OutputType>
+	<StartupObject>LSLExamples.EntryPoint</StartupObject>
+  </PropertyGroup>
+   <ItemGroup>
+    <ProjectReference Include="..\liblsl.csproj" />
+  </ItemGroup>
+</Project>
