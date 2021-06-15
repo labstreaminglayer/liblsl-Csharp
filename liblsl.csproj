@@ -7,6 +7,15 @@
     <Version>2.0</Version>
     <DefaultItemExcludes>$(DefaultItemExcludes);examples/**</DefaultItemExcludes>
     <AssemblyName>lsl_csharp</AssemblyName>
+    <Copyright>Copyright © Christian Kothe 2021</Copyright>
+    <ProjectUrl>https://github.com/labstreaminglayer/liblsl-Csharp</ProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>LSL Lab Streaming Layer</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <RuntimeIdentifiers>win-x86;win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
-</Project>
 
+  <ItemGroup>
+    <Content Include="runtimes\**" Exclude="runtimes\README.md" PackagePath="runtimes" />
+  </ItemGroup>
+</Project>
