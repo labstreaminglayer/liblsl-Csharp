@@ -1,0 +1,29 @@
+name: .NET Core
+
+on:
+  push:
+    branches: '*'
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.x
+    - name: Build and package liblsl
+      run: dotnet pack -c Release liblsl.csproj -o pkg
+    - name: Build and package examples
+      run: dotnet pack -c Release examples/LSLExamples.csproj -o pkg
+#    - name: Run examples
+#      run: dotnet run -p examples/LSLExamples.csproj
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: nuget pkg
+        path: pkg
