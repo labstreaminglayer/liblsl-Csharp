@@ -33,8 +33,8 @@ public class LSLInput : MonoBehaviour
 {
     public string StreamType = "EEG";
     public float scaleInput = 0.1f;
-    LSL.StreamInfo[] streamInfos;
-    LSL.StreamInlet streamInlet;
+    StreamInfo[] streamInfos;
+    StreamInlet streamInlet;
     float[] sample;
     private int channelCount = 0;
 
@@ -45,7 +45,7 @@ public class LSLInput : MonoBehaviour
             streamInfos = resolve_stream("type", StreamType, 1, 0.0);
             if (streamInfos.Length > 0)
             {
-                streamInlet = new LSL.StreamInlet(streamInfos[0]);
+                streamInlet = new StreamInlet(streamInfos[0]);
                 channelCount = streamInlet.info().channel_count();
                 streamInlet.open_stream();
             }
@@ -88,7 +88,7 @@ using LSL;
 
 public class LSLOutput : MonoBehaviour
 {
-    private LSL.StreamOutlet outlet;
+    private StreamOutlet outlet;
     private float[] currentSample;
 
     public string StreamName = "Unity.ExampleStream";
@@ -98,12 +98,12 @@ public class LSLOutput : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LSL.StreamInfo streamInfo = new LSL.StreamInfo(StreamName, StreamType, 3, Time.fixedDeltaTime * 1000, LSL.channel_format_t.cf_float32);
-        LSL.XMLElement chans = streamInfo.desc().append_child("channels");
+        StreamInfo streamInfo = new StreamInfo(StreamName, StreamType, 3, Time.fixedDeltaTime * 1000, LSL.channel_format_t.cf_float32);
+        XMLElement chans = streamInfo.desc().append_child("channels");
         chans.append_child("channel").append_child_value("label", "X");
         chans.append_child("channel").append_child_value("label", "Y");
         chans.append_child("channel").append_child_value("label", "Z");
-        outlet = new LSL.StreamOutlet(streamInfo);
+        outlet = new StreamOutlet(streamInfo);
         currentSample = new float[3];
     }
 
