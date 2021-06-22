@@ -27,6 +27,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using LSL;
+using static LSL.LSL;
 
 public class LSLInput : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class LSLInput : MonoBehaviour
     {
         if (streamInlet == null)
         {
-            streamInfos = LSL.LSL.resolve_stream("type", StreamType, 1, 0.0);
+            streamInfos = resolve_stream("type", StreamType, 1, 0.0);
             if (streamInfos.Length > 0)
             {
                 streamInlet = new LSL.StreamInlet(streamInfos[0]);
