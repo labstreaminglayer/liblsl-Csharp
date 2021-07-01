@@ -495,7 +495,7 @@ namespace LSL
         * Wait until some consumer shows up (without wasting resources).
         * @return True if the wait was successful, false if the timeout expired.
         */
-        public bool wait_for_consumers(double timeout = LSL.FOREVER) { return dll.lsl_wait_for_consumers(obj) > 0; }
+        public bool wait_for_consumers(double timeout = LSL.FOREVER) { return dll.lsl_wait_for_consumers(obj, timeout) > 0; }
 
         /**
         * Retrieve the stream info provided by this outlet.
@@ -1023,7 +1023,7 @@ namespace LSL
         public static extern int lsl_have_consumers(IntPtr obj);
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
-        public static extern int lsl_wait_for_consumers(IntPtr obj);
+        public static extern int lsl_wait_for_consumers(IntPtr obj, double timeout);
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern IntPtr lsl_get_info(IntPtr obj);
