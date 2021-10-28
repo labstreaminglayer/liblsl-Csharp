@@ -27,14 +27,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using LSL;
-using static LSL.LSL;
 
 public class LSLInput : MonoBehaviour
 {
     public string StreamType = "EEG";
     public float scaleInput = 0.1f;
+
     StreamInfo[] streamInfos;
     StreamInlet streamInlet;
+
     float[] sample;
     private int channelCount = 0;
 
@@ -42,7 +43,8 @@ public class LSLInput : MonoBehaviour
     {
         if (streamInlet == null)
         {
-            streamInfos = resolve_stream("type", StreamType, 1, 0.0);
+
+            streamInfos = LSL.resolve_stream("type", StreamType, 1, 0.0);
             if (streamInfos.Length > 0)
             {
                 streamInlet = new StreamInlet(streamInfos[0]);
@@ -91,6 +93,7 @@ public class LSLOutput : MonoBehaviour
     private StreamOutlet outlet;
     private float[] currentSample;
 
+
     public string StreamName = "Unity.ExampleStream";
     public string StreamType = "Unity.StreamType";
     public string StreamId = "MyStreamID-Unity1234";
@@ -106,6 +109,7 @@ public class LSLOutput : MonoBehaviour
         outlet = new StreamOutlet(streamInfo);
         currentSample = new float[3];
     }
+
 
     // Update is called once per frame
     void FixedUpdate()
