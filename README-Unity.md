@@ -20,7 +20,7 @@ LSL.cs includes a Unity interface to liblsl as a [Unity native plug-in](https://
 1. When the cube is selected, in the Inspector click on "Add Component", and create a new script called LSLInput.
 1. In the Project viewer, double click on LSLInput.cs. This should launch Visual Studio or another IDE.
 1. Fill in the script. Use [LSL4Unity AInlet](https://github.com/labstreaminglayer/LSL4Unity/blob/master/Scripts/AInlet.cs) for inspiration.
-    * There is [currently a bug](https://github.com/sccn/liblsl/issues/29) that prevents liblsl in Unity from resolving streams from _other_ computers while running in editor, and also the built product but only when using `ContinuousResolver`. For this reason we recommend using `liblsl.resolve_stream` instead.
+    * There is [currently a bug](https://github.com/sccn/liblsl/issues/29) that prevents liblsl in Unity from resolving streams from _other_ computers while running in editor, and also the built product but only when using `ContinuousResolver`. For this reason we recommend using `LSL.resolve_stream` instead.
 
 ```cs
 using System.Collections;
@@ -32,8 +32,10 @@ public class LSLInput : MonoBehaviour
 {
     public string StreamType = "EEG";
     public float scaleInput = 0.1f;
-    LSL.StreamInfo[] streamInfos;
-    LSL.StreamInlet streamInlet;
+
+    StreamInfo[] streamInfos;
+    StreamInlet streamInlet;
+
     float[] sample;
     private int channelCount = 0;
 
@@ -41,10 +43,11 @@ public class LSLInput : MonoBehaviour
     {
         if (streamInlet == null)
         {
+
             streamInfos = LSL.resolve_stream("type", StreamType, 1, 0.0);
             if (streamInfos.Length > 0)
             {
-                streamInlet = new LSL.StreamInlet(streamInfos[0]);
+                streamInlet = new StreamInlet(streamInfos[0]);
                 channelCount = streamInlet.info().channel_count();
                 streamInlet.open_stream();
             }
@@ -79,41 +82,43 @@ public class LSLInput : MonoBehaviour
 
 1. Attach a new component called LSLPosOutput to the cube.
 1. Edit it as follows:
-    ```cs
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using LSL;
+```cs
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using LSL;
 
-    public class LSLOutput : MonoBehaviour
+public class LSLOutput : MonoBehaviour
+{
+    private StreamOutlet outlet;
+    private float[] currentSample;
+
+
+    public string StreamName = "Unity.ExampleStream";
+    public string StreamType = "Unity.StreamType";
+    public string StreamId = "MyStreamID-Unity1234";
+
+    // Start is called before the first frame update
+    void Start()
     {
-        private LSL.StreamOutlet outlet;
-        private float[] currentSample;
-
-        public string StreamName = "Unity.ExampleStream";
-        public string StreamType = "Unity.StreamType";
-        public string StreamId = "MyStreamID-Unity1234";
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            LSL.StreamInfo streamInfo = new LSL.StreamInfo(StreamName, StreamType, 3, Time.fixedDeltaTime * 1000, liblsl.channel_format_t.cf_float32);
-            LSL.XMLElement chans = streamInfo.desc().append_child("channels");
-            chans.append_child("channel").append_child_value("label", "X");
-            chans.append_child("channel").append_child_value("label", "Y");
-            chans.append_child("channel").append_child_value("label", "Z");
-            outlet = new LSL.StreamOutlet(streamInfo);
-            currentSample = new float[3];
-        }
-
-        // Update is called once per frame
-        void FixedUpdate()
-        {
-            Vector3 pos = gameObject.transform.position;
-            currentSample[0] = pos.x;
-            currentSample[1] = pos.y;
-            currentSample[2] = pos.z;
-            outlet.push_sample(currentSample);
-        }
+        StreamInfo streamInfo = new StreamInfo(StreamName, StreamType, 3, Time.fixedDeltaTime * 1000, LSL.channel_format_t.cf_float32);
+        XMLElement chans = streamInfo.desc().append_child("channels");
+        chans.append_child("channel").append_child_value("label", "X");
+        chans.append_child("channel").append_child_value("label", "Y");
+        chans.append_child("channel").append_child_value("label", "Z");
+        outlet = new StreamOutlet(streamInfo);
+        currentSample = new float[3];
     }
-    ```
+
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        Vector3 pos = gameObject.transform.position;
+        currentSample[0] = pos.x;
+        currentSample[1] = pos.y;
+        currentSample[2] = pos.z;
+        outlet.push_sample(currentSample);
+    }
+}
+```
