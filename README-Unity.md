@@ -111,7 +111,8 @@ public class LSLOutput : MonoBehaviour
     }
 
 
-    // Update is called once per frame
+    // FixedUpdate is a good hook for objects that are governed mostly by physics (gravity, momentum).
+    // Update might be better for objects that are governed by code (stimulus, event).
     void FixedUpdate()
     {
         Vector3 pos = gameObject.transform.position;
