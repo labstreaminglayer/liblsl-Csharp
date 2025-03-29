@@ -1,8 +1,18 @@
 <Project>
   <PropertyGroup>
+    <TargetFrameworks>net35;netstandard2.0;net5.0;net6.0</TargetFrameworks>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Version>1.16.2-preview.1</Version>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Christian Kothe</Authors>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.12.2</Version>
+    <Company>Christian Kothe</Company>
+    <Copyright>Copyright © Christian Kothe 2021-2025</Copyright>
   </PropertyGroup>
 </Project>
-

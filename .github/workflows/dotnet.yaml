@@ -1,0 +1,88 @@
+name: LSL.Net
+
+on:
+  pull_request:
+  push:
+    branches: '*'
+  workflow_dispatch:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    name: Build-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macOS-latest ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            5.0.x
+            6.0.x
+
+      - name: List installed .NET SDKs
+        run: dotnet --list-sdks
+
+      - name: Build
+        run: dotnet build -c Release LSL.Net.sln
+
+      - name: Pack
+        run: dotnet pack -c Release src/LSL.Net.slnf
+
+      - name: Setup library path
+        if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+        run: |
+          echo ${{ github.workspace }}
+          uname -a
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            echo "DYLD_LIBRARY_PATH=${{ github.workspace }}/examples/LSLVer/bin/Release/net6.0" >> "$GITHUB_ENV"
+          else
+            echo "LD_LIBRARY_PATH=${{ github.workspace }}/examples/LSLVer/bin/Release/net6.0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Run LSLVer
+        # LSL.Net.runtime for linux and macOS is not yet landed.
+        if: ${{ runner.os == 'Windows' }}
+        run: dotnet run -c Release -p examples/LSLVer/LSLVer.csproj -f net6.0
+
+      - name: Upload build artifacts
+        if: ${{ runner.os == 'Linux' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: "**/*.*nupkg"
+
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'release'
+    steps:
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-packages
+
+      - name: Push NuGet packages
+        run: |
+          dotnet nuget push **/*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          generate_release_notes: true
+          files: |
+            **/*.nupkg
+            **/*.snupkg

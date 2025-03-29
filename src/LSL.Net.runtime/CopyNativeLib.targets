@@ -1,0 +1,47 @@
+<Project>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <OSName>linux</OSName>
+    <NativeLibFile>liblsl.so</NativeLibFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <OSName>osx</OSName>
+    <NativeLibFile>liblsl.dylib</NativeLibFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <OSName>win</OSName>
+    <NativeLibFile>lsl.dll</NativeLibFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OSArch Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm'">arm</OSArch>
+    <OSArch Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64'">arm64</OSArch>
+    <OSArch Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64'">x64</OSArch>
+    <OSArch Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X86'">x86</OSArch>
+  </PropertyGroup>
+
+  <!--
+  This is a workaround for the issue mentioned in: https://github.com/dotnet/sdk/issues/19929.
+  However, this approach has drawbacks:
+  1. On Windows, it does not load the correct version of `lsl.dll` based on AnyCPU/x64/x86 project configuration;
+  2. On Linux and macOS, you should set `LD_LIBRARY_PATH` and `DYLD_LIBRARY_PATH` respectively.
+  Another solution is to use `PackageReference` instead of `ProjectReference` to reference
+  `LSL.Net.runtime.[rid]`.
+  -->
+  <Target Name="CopyNativeLib" AfterTargets="PostBuildEvent">
+    <ItemGroup>
+      <NativeLibPath Include="$(MSBuildThisFileDirectory)$(OSName)-$(OSArch)/$(BaseIntermediateOutputPath)**/$(NativeLibFile)" />
+      <None Include="@(NativeLibPath)">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <Message Text="Copying lsl native lib: @(NativeLibPath) -> $(OutDir)$(NativeLibFile)"
+             Importance="High" />
+
+    <Copy SourceFiles="@(NativeLibPath)" 
+          DestinationFolder="$(OutDir)" 
+          SkipUnchangedFiles="true" />
+  </Target>
+</Project>

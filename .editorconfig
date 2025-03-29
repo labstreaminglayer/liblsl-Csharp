@@ -4,10 +4,23 @@
 ###############################
 # All files
 [*]
+charset = utf8
+indent_style = space
 indent_size = 4
 insert_final_newline = true
-charset = utf
-indent_style = space
+trim_trailing_whitespace = true
+
+###############################
+# File Extension Settings     #
+###############################
+
+# Visual Studio Solution Files
+[*.sln]
+indent_style = tab
+
+# Visual Studio XML Project Files
+[*.{csproj,vbproj,vcxproj.filters,proj,projitems,shproj}]
+indent_size = 2
 
 [*.{cs,csx,vb,vbx}]
 

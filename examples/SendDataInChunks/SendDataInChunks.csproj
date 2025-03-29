@@ -1,12 +1,2 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-	<TargetFramework>net5.0</TargetFramework>
-	<Product>Labstreaminglayer C# examples</Product>
-	<Version>1.14</Version>
-	<LangVersion>8.0</LangVersion>
-	<OutputType>Exe</OutputType>
-  </PropertyGroup>
-   <ItemGroup>
-    <ProjectReference Include="..\..\liblsl.csproj" />
-  </ItemGroup>
 </Project>

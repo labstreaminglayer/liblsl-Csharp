@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace LSL
@@ -93,6 +96,11 @@ namespace LSL
         * The minor version is library_version() % 100;
         */
         public static int library_version() { return dll.lsl_library_version(); }
+
+        /**
+        * Get a string containing library information.
+        */
+        public static string library_info() { return Marshal.PtrToStringAnsi(dll.lsl_library_info()); }
 
         /**
         * Obtain a local system time stamp in seconds. The resolution is better than a millisecond.
@@ -893,6 +901,28 @@ namespace LSL
 
     class dll
     {
+#if NET35
+        static dll()
+        {
+            var searchPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
+            //if (Environment.Is64BitProcess)
+            if (IntPtr.Size == 8)
+                searchPath = Path.Combine(searchPath, "x64");
+            else
+                searchPath = Path.Combine(searchPath, "x86");
+
+            if (Directory.Exists(searchPath))
+            {
+                Trace.WriteLine($"Search LSL dynamic library in {searchPath}.");
+                SetDllDirectory(searchPath);
+            }
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool SetDllDirectory(string path);
+#endif
+
         // Name of the binary to include -- replace this if the native library has a differentname
         const string libname = "lsl";
 
@@ -901,6 +931,9 @@ namespace LSL
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern int lsl_library_version();
+
+        [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
+        public static extern IntPtr lsl_library_info();
 
         [DllImport(libname, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, ExactSpelling = true)]
         public static extern double lsl_local_clock();

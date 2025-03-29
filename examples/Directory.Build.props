@@ -1,6 +1,27 @@
 <Project>
-<Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPublishable>false</IsPublishable>
     <LangVersion>8.0</LangVersion>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+    <UseNugetPackage>false</UseNugetPackage>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\LSL.Net\LSL.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNugetPackage)' == 'false'">
+    <ProjectReference Include="..\..\src\LSL.Net.runtime\win-x64\LSL.Net.runtime.win-x64.csproj" />
+    <ProjectReference Include="..\..\src\LSL.Net.runtime\win-x86\LSL.Net.runtime.win-x86.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseNugetPackage)' == 'true'">
+    <PackageReference Include="LSL.Net.runtime.win-x64" />
+    <PackageReference Include="LSL.Net.runtime.win-x86" />
+  </ItemGroup>
+
+  <Import Project="..\src\LSL.Net.runtime\CopyNativeLib.targets" />
 </Project>

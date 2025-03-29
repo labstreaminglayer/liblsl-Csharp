@@ -1,0 +1,74 @@
+<Project>
+
+  <PropertyGroup>
+    <PackageId>LSL.Net.runtime.$(RID)</PackageId>
+    <Description>liblsl runtime library for $(RID)</Description>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NativeAssetUrl>https://github.com/sccn/liblsl/releases/download/v$(LSLRuntimeVersion)/$(NativeAssetFile)</NativeAssetUrl>
+    <NativeLibFile>$(NativeLibPrefix)lsl.$(NativeLibExt)</NativeLibFile>
+    <NativeLibUnpackDir>$(ProjectDir)$(BaseIntermediateOutputPath)$(NativeAssetTitle)/</NativeLibUnpackDir>
+  </PropertyGroup>
+
+  <Target Name="_DownloadNativeAsset" BeforeTargets="_UnpackNativeAsset">
+    <DownloadFile SourceUrl="$(NativeAssetUrl)"
+                  DestinationFolder="$(ProjectDir)$(BaseIntermediateOutputPath)"
+                  DestinationFileName="$(NativeAssetFile)"
+                  Condition="!Exists('$(ProjectDir)$(BaseIntermediateOutputPath)$(NativeAssetFile)')" />
+  </Target>
+
+  <Target Name="_UnpackNativeAsset" BeforeTargets="_CollectNativeLibs">
+    <Unzip SourceFiles="$(ProjectDir)$(BaseIntermediateOutputPath)$(NativeAssetFile)"
+           DestinationFolder="$(NativeLibUnpackDir)"
+           OverwriteReadOnlyFiles="true"
+           Condition="!Exists('$(NativeLibUnpackDir)$(NativeLibBaseDir)/$(NativeLibFile)')"  />
+  </Target>
+
+  <Target Name="_CollectNativeLibs" BeforeTargets="Build">
+    <ItemGroup>
+      <NativeLibs Include="$(NativeLibUnpackDir)$(NativeLibBaseDir)/**/$(NativeLibFile)" />
+      <None Include="@(NativeLibs)">
+        <Pack>true</Pack>
+        <PackagePath>runtimes/$(RID)/native</PackagePath>
+        <Link>runtimes/$(RID)/native/%(FileName)%(Extension)</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_IncludeAdditionalTfmSpecificPackageFilesPrepare">
+    <GetNuGetShortFolderName TargetFrameworkMoniker="$(TargetFrameworkMoniker)" TargetPlatformMoniker="$(TargetPlatformMoniker)">
+      <Output TaskParameter="NuGetShortFolderName" PropertyName="NuGetShortFolderName" />
+    </GetNuGetShortFolderName>
+  </Target>
+
+  <Target Name="_IncludePlaceholders" AfterTargets="_IncludeAdditionalTfmSpecificPackageFilesPrepare">
+    <Touch Files="$(IntermediateOutputPath)_._" AlwaysCreate="True" />
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)_._" />
+      <TfmSpecificPackageFile Include="$(IntermediateOutputPath)_._"
+                              PackagePath="lib\$(NuGetShortFolderName)\_._" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_IncludeAdditionalTfmSpecificPackageFiles">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+      <TfmSpecificPackageFile Include="$(ProjectDir)build\net35\$(PackageId).targets"
+                              PackagePath="build\net35\$(PackageId).targets" />
+      <TfmSpecificPackageFile Include="$(ProjectDir)build\net35\$(PackageId).targets"
+                              PackagePath="buildTransitive\net35\$(PackageId).targets" />
+    </ItemGroup>
+  </Target>
+
+  <PropertyGroup>
+    <_IncludeAdditionalTfmSpecificPackageFilesDependsOn>
+      _IncludeAdditionalTfmSpecificPackageFilesPrepare;
+      _IncludeAdditionalTfmSpecificPackageFiles;
+    </_IncludeAdditionalTfmSpecificPackageFilesDependsOn>
+  </PropertyGroup>
+
+  <Target Name="IncludeAdditionalTfmSpecificPackageFiles"
+          DependsOnTargets="$(_IncludeAdditionalTfmSpecificPackageFilesDependsOn)" />
+
+</Project>

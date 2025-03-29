@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RID>win-x86</RID>
+    <NativeAssetTitle>liblsl-$(LSLRuntimeVersion)-Win_i386</NativeAssetTitle>
+    <NativeAssetFile>$(NativeAssetTitle).zip</NativeAssetFile>
+    <NativeLibBaseDir>bin</NativeLibBaseDir>
+    <NativeLibPrefix></NativeLibPrefix>
+    <NativeLibExt>dll</NativeLibExt>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);IncludeAdditionalTfmSpecificPackageFiles</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
+</Project>

@@ -1,20 +1,32 @@
-# C# bindings
+# LSL.Net
 
-The is the C# interface to the lab streaming layer. To use it, you need to include the file LSL.cs in your project, and make sure that the appropriate lsl library (e.g. lsl.dll) is findable (e.g., in your application's root directory or in a system path). If LSL.cs fails to find the lsl shared library for your target platform, edit LSL.cs and update the libname line with the library name for your target platform. As of liblsl 1.14, this should be the same for all targets: `const string libname = "lsl";`
+LSL.Net is a cross-platform C# binding of [Lab Streaming Layer](https://github.com/sccn/labstreaminglayer).
 
-## Using Visual Studio 2019
+## Usage
 
-* Make sure you have the .NET desktop development pack installed.
-* Open the liblsl.sln file. If you are asked to upgrade then go ahead.
-* Add lsl.dll to your solution.
-    * In the solution explorer, right click on the `liblsl` target and choose `Add > Existing Item ...`.
-    * In the new explorer window, change the `Add` dropdown button to `Add as Link` and change the file types/extensions to `all files (*.*)`. Browse to where you have lsl.dll ([previously downloaded from here](https://github.com/sccn/liblsl/releases)) and select it.
-* Click on the lsl.dll entry now in the solution explorer to view its properties.
-* Set "Build Action" to "Content" and "Copy to Output Directory" to "Copy if newer".
+LSL.Net is available as a convenient NuGet package. You can install LSL.Net using any of the following methods:
 
-![Visual Studio lsl.dll properties](img/vs2019_lsl_props.PNG)
+.NET CLI:
 
-From now on, whenever a target in the solution is built, lsl.dll will be copied into the build directory.
+```
+dotnet add package LSL.Net --version <version>
+```
+
+NuGet package manager:
+
+```
+Install-Package LSL.Net -Version <version>
+```
+
+PackageReference:
+
+```
+<PackageReference Include="LSL.Net" Version="<version>" />
+```
+
+Replace `<version>` with the specific version number of LSL.Net you wish to use.
+
+In addition to installing LSL.Net, you will need to install the appropriate liblsl runtime package(s) for your target platform(s). There are separate NuGet packages that contain liblsl native binaries for the most common platforms, named [```LSL.Net.runtime.[RID]```](https://www.nuget.org/packages?q=LSL.Net.runtime), where `[RID]` represents the runtime identifier for the specific platform. For details on runtime identifiers, refer to the [.NET RID catalog](https://learn.microsoft.com/en-us/dotnet/core/rid-catalog). You can find the list of available native packages and their platform mappings in the [LSL.Net.runtime README](https://github.com/labstreaminglayer/liblsl-Csharp/blob/master/src/LSL.Net.runtime/README.md).
 
 # C# Example Programs
 

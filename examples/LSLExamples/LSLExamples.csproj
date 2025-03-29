@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+  All-in-one example project.
+  It contains a launcher for all examples in the subdirectories that
+  compiles to a single .exe, prints some information about the wrapper and
+  passes all arguments through to the example specified as first command line
+  argument.
+  -->
+  <PropertyGroup>
+    <StartupObject>LSLExamples.EntryPoint</StartupObject>
+   </PropertyGroup>
+</Project>

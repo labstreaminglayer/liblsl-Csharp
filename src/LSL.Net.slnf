@@ -1,0 +1,10 @@
+{
+  "solution": {
+    "path": "..\\LSL.Net.sln",
+    "projects": [
+      "src\\LSL.Net.runtime\\win-x64\\LSL.Net.runtime.win-x64.csproj",
+      "src\\LSL.Net.runtime\\win-x86\\LSL.Net.runtime.win-x86.csproj",
+      "src\\LSL.Net\\LSL.Net.csproj"
+    ]
+  }
+}
